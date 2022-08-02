@@ -16,21 +16,25 @@ export class BadgeController {
     return this.badgeservice.createBadge(badgeDTO);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Patch('/:id')
   updateBadge(@Param('id') id: number, @Body() badgeDTO: UpdateBadgeDto) {
     return this.badgeservice.updateBadge(id, badgeDTO);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get('findAll')
   findAll(@Query('page') page: number) {
     return this.badgeservice.findAll(page);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
   find(@Param('id') id: number) {
     return this.badgeservice.find(id);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Delete('/:id')
   async remove(@Param('id') id: number) {
     const response = await this.badgeservice.remove(id);
