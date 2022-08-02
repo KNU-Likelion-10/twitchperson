@@ -1,9 +1,9 @@
 import {
   Controller, Get, Req, Res, UseGuards,
 } from '@nestjs/common';
-import { RefreshService } from '@src/auth-refresh/auth.service';
-import { AuthService } from '@src/auth/auth.service';
-import { TwitchAuthGuard } from '@src/auth/guard/twitch-auth.guard';
+import { RefreshService } from '@refresh/auth.service';
+import { AuthService } from '@auth/auth.service';
+import { TwitchAuthGuard } from '@auth/guard/twitch-auth.guard';
 
 export type twitchInfo = {
     accessToken: string,

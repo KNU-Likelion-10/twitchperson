@@ -2,10 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { RefreshService } from '@src/auth-refresh/auth.service';
-import { User } from '@src/auth/user.entity';
-import { twitchInfo } from '@src/auth/auth.controller';
-import { UserPaylodeValue } from '@src/auth/jwt.interface';
+import { RefreshService } from '@refresh/auth.service';
+import { User } from '@auth/user.entity';
+import { twitchInfo } from '@auth/auth.controller';
+import { UserPaylodeValue } from '@auth/jwt.interface';
 import { config } from 'dotenv';
 
 config();

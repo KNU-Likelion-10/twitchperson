@@ -19,6 +19,13 @@
     "noFallthroughCasesInSwitch": false,
     "paths": {
       "@src/*": ["./src/*"],
+      "@auth/*": ["./src/auth/*"],
+      "@refresh/*": ["./src/auth-refresh/*"],
+      "@badge/*": ["./src/badge/*"],
+      "@image/*": ["./src/image/*"],
+      "@level/*": ["./src/level/*"],
+      "@streamer/*": ["./src/streamer/*"],
+      "@twitch/*": ["./src/twitch-api/*"]
     }
   }
 }

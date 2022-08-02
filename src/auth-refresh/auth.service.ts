@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { UserPaylodeValue } from '@src/auth/jwt.interface';
+import { UserPaylodeValue } from '@auth/jwt.interface';
 import { config } from 'dotenv';
 
 config();

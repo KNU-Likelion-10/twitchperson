@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { BadgeController } from './badge.controller';
+import { BadgeController } from '@badge/badge.controller';
 
 describe('BadgeController', () => {
   let controller: BadgeController;

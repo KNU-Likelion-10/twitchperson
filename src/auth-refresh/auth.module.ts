@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
-import { RefreshService } from '@src/auth-refresh/auth.service';
+import { RefreshService } from '@refresh/auth.service';
 import { config } from 'dotenv';
 
 config();

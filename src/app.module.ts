@@ -7,18 +7,17 @@ import {
 } from 'nest-winston';
 import { AppController } from '@src/app.controller';
 import { AppService } from '@src/app.service';
-import { RefreshModule } from '@src/auth-refresh/auth.module';
-import { AuthModule } from '@src/auth/auth.module';
-import { LevelModule } from '@src/level/level.module';
-import { BadgeModule } from '@src/badge/badge.module';
-import { ImageModule } from '@src/image/image.module';
-import { StreamerModule } from '@src/streamer/streamer.module';
-import { TwitchApiModule } from '@src/twitch-api/twitch-api.module';
-import { Badge } from '@src/badge/badge.entity';
-import { Image } from '@src/image/image.entity';
-import { User } from '@src/auth/user.entity';
+import { RefreshModule } from '@refresh/auth.module';
+import { AuthModule } from '@auth/auth.module';
+import { LevelModule } from '@level/level.module';
+import { BadgeModule } from '@badge/badge.module';
+import { ImageModule } from '@image/image.module';
+import { StreamerModule } from '@streamer/streamer.module';
+import { TwitchApiModule } from '@twitch/twitch-api.module';
+import { Badge } from '@badge/badge.entity';
+import { Image } from '@image/image.entity';
+import { User } from '@auth/user.entity';
 import { config } from 'dotenv';
-import { ProcessCredentials } from 'aws-sdk';
 
 config();
 

@@ -2,7 +2,7 @@ import {
   PrimaryGeneratedColumn, Column, Entity, ManyToOne,
 } from 'typeorm';
 import { BaseEntity } from '@src/baseEntity';
-import { User } from '@src/auth/user.entity';
+import { User } from '@auth/user.entity';
 
 @Entity()
 export class Badge extends BaseEntity {

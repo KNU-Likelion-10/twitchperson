@@ -1,4 +1,4 @@
-import { Badge } from '@src/badge/badge.entity';
+import { Badge } from '@badge/badge.entity';
 import {
   PrimaryGeneratedColumn, Column, Entity, OneToMany,
 } from 'typeorm';

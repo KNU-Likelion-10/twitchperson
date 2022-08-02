@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ImageController } from '@src/image/image.controller';
-import { Image } from '@src/image/image.entity';
-import { ImageService } from '@src/image/image.service';
+import { ImageController } from '@image/image.controller';
+import { Image } from '@image/image.entity';
+import { ImageService } from '@image/image.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Image])],

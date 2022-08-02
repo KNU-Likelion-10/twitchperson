@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import StreamerController from '@src/streamer/streamer.controller';
+import { StreamerController } from '@streamer/streamer.controller';
 
 describe('StreamerController', () => {
   let controller: StreamerController;

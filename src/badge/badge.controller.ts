@@ -1,10 +1,10 @@
 import {
   Body, Controller, Get, Query, Post, Param, Delete, Patch, UseGuards, Req,
 } from '@nestjs/common';
-import { JwtAuthGuard } from '@src/auth/guard/jwt-access-auth.guard';
-import { BadgeService } from '@src/badge/badge.service';
-import { CreateBadgeDto } from '@src/badge/create-badge.dto';
-import { UpdateBadgeDto } from '@src/badge/update-badge.dto';
+import { JwtAuthGuard } from '@auth/guard/jwt-access-auth.guard';
+import { BadgeService } from '@badge/badge.service';
+import { CreateBadgeDto } from '@badge/create-badge.dto';
+import { UpdateBadgeDto } from '@badge/update-badge.dto';
 
 @Controller('badge')
 export class BadgeController {

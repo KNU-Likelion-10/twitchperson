@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import StreamerService from '@src/streamer/streamer.service';
+import { StreamerService } from '@streamer/streamer.service';
 
 describe('StreamerService', () => {
   let service: StreamerService;

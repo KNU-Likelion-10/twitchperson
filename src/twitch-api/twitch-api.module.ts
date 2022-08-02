@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { TwitchApiService } from '@src/twitch-api/twitch-api.service';
+import { TwitchApiService } from '@twitch/twitch-api.service';
 
 @Module({
   providers: [TwitchApiService],

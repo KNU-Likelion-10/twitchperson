@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { StreamerService } from '@src/streamer/streamer.service';
-import { StreamerController } from '@src/streamer/streamer.controller';
+import { StreamerService } from '@streamer/streamer.service';
+import { StreamerController } from '@streamer/streamer.controller';
 
 @Module({
   providers: [StreamerService],

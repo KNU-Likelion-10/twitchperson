@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import TwitchApiService from '@src/twitch-api/twitch-api.service';
+import { TwitchApiService } from '@twitch/twitch-api.service';
 
 describe('TwitchApiService', () => {
   let service: TwitchApiService;

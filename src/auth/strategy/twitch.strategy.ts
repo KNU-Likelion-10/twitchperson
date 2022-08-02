@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-twitch-latest';
-import { twitchInfo } from '@src/auth/auth.controller';
+import { twitchInfo } from '@auth/auth.controller';
 import { config } from 'dotenv';
 
 config();
