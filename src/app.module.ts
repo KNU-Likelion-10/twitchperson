@@ -37,7 +37,7 @@ config();
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: process.env.HOST,
-      port: +process.env.PROT,
+      port: +process.env.PORT,
       username: process.env.USER_NAME,
       password: process.env.PASSWORD,
       database: process.env.DATABASE,
