@@ -1,8 +1,8 @@
 import {
-  PrimaryGeneratedColumn, Column, Entity, ManyToOne,
+  PrimaryGeneratedColumn, Column, Entity, OneToMany,
 } from 'typeorm';
 import { BaseEntity } from '@src/baseEntity';
-import { User } from '@auth/user.entity';
+import { UserToBadge } from '@user/user-badge';
 
 @Entity()
 export class Badge extends BaseEntity {
@@ -16,7 +16,7 @@ export class Badge extends BaseEntity {
     desc: string;
 
   @Column({ nullable: false })
-    codition: string;
+    condition: string;
 
   @Column({ default: 0, nullable: false })
     exp: number;
@@ -27,6 +27,6 @@ export class Badge extends BaseEntity {
   @Column({ default: 0, nullable: false })
     unlike: number;
 
-  @ManyToOne((type) => User)
-    user: User;
+  @OneToMany((type) => UserToBadge, (badge) => badge.user)
+    user: UserToBadge[];
 }

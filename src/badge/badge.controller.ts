@@ -52,4 +52,5 @@ export class BadgeController {
       statusMsg: 'deleted failed',
     };
   }
+
 }

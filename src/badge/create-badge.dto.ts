@@ -8,7 +8,7 @@ export class CreateBadgeDto {
     desc: string;
 
   @IsString()
-    codition: string;
+    condition: string;
 
   @IsNumber()
     exp: number;

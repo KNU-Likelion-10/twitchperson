@@ -11,7 +11,7 @@ export class UpdateBadgeDto {
 
   @IsString()
   @IsOptional()
-  readonly codition: string;
+  readonly condition: string;
 
   @IsNumber()
   @IsOptional()

@@ -7,9 +7,10 @@ import { UpdateBadgeDto } from '@badge/update-badge.dto';
 
 @Injectable()
 export class BadgeService {
+  
   constructor(
-        @InjectRepository(Badge)
-        private readonly badgeRepository: Repository<Badge>,
+    @InjectRepository(Badge)
+    private readonly badgeRepository: Repository<Badge>
   ) {}
 
   findAll(page: number) {
@@ -31,7 +32,7 @@ export class BadgeService {
 
   async updateBadge(id: number, badgeDTO: UpdateBadgeDto): Promise<Badge> {
     const data: Badge = await this.badgeRepository.findOne({
-      where: [{ id }],
+      where: { id },
     });
 
     if (badgeDTO.name) {
@@ -42,8 +43,8 @@ export class BadgeService {
       data.desc = badgeDTO.desc;
     }
 
-    if (badgeDTO.codition) {
-      data.codition = badgeDTO.codition;
+    if (badgeDTO.condition) {
+      data.condition = badgeDTO.condition;
     }
 
     if (badgeDTO.exp) {
@@ -56,4 +57,5 @@ export class BadgeService {
   async remove(id: number): Promise<DeleteResult> {
     return await this.badgeRepository.delete({ id });
   }
+
 }
