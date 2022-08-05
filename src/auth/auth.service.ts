@@ -3,7 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { RefreshService } from '@refresh/auth.service';
-import { User } from '@auth/user.entity';
+import { User } from '@user/user.entity';
 import { twitchInfo } from '@auth/auth.controller';
 import { UserPaylodeValue } from '@auth/jwt.interface';
 import { config } from 'dotenv';
@@ -61,4 +61,5 @@ export class AuthService {
     const payload: UserPaylodeValue = { id: user.id };
     return this.jwtService.sign(payload);
   }
+  
 }

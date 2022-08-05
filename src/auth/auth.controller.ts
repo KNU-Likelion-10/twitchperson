@@ -56,7 +56,7 @@ export class AuthController {
     // return res.redirect(`http://codeduri.saintdev.kr/oauth/callback?accessToken=${accessToken}&refreshToken=${refreshToken}`);
     // return res.redirect(`http://localhost:53214/oauth/callback?accessToken=${accessToken}&refreshToken=${refreshToken}`);
     // res.setHeader("accessToken", accessToken);
-    return res.redirect(`/oauth/hi?accessToken=${accessToken}`);
+    return res.redirect(`/oauth?/hi?accessToken=${accessToken}`);
   }
 
   @Get('/hi')
