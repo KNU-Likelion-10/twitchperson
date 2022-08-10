@@ -9,7 +9,7 @@ export class UserController {
     ) {}
 
     @UseGuards(JwtAuthGuard)
-    @Post('/:id')
+    @Post('take-badge/:id')
     getBadge(@Req() req, @Param('id') id: number) {
       const user = req.user;
       this.userServcie.getBadge(id, user);

@@ -1,14 +1,13 @@
 import { Module } from '@nestjs/common';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { RefreshModule } from '@refresh/auth.module';
 import { RefreshService } from '@refresh/auth.service';
 import { TwitchStrategy } from '@auth/strategy/twitch.strategy';
 import { JwtStrategy } from '@auth/strategy/jwt-access.strategy';
 import { AuthController } from '@auth/auth.controller';
 import { AuthService } from '@auth/auth.service';
-import { User } from '@user/user.entity';
+import { UserModule } from '@user/user.module';
 import { config } from 'dotenv';
 
 config();
@@ -21,7 +20,7 @@ config();
       signOptions: { expiresIn: '5h' },
     }),
     RefreshModule,
-    TypeOrmModule.forFeature([User]),
+    UserModule,
   ],
   providers: [TwitchStrategy, AuthService, RefreshService, JwtStrategy],
   controllers: [AuthController]

@@ -9,7 +9,7 @@ config();
   imports: [
     JwtModule.register({
       secret: process.env.JWT_RFRESH_TOKEN_SECRET_KEY,
-      signOptions: { expiresIn: '5m' },
+      signOptions: { expiresIn: '2d' },
     }),
   ],
   providers: [RefreshService],

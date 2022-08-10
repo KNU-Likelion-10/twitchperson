@@ -1,4 +1,3 @@
-import { Badge } from '@src/badge/badge.entity';
 import {
   PrimaryGeneratedColumn, Column, Entity, OneToMany, JoinColumn,
 } from 'typeorm';
@@ -35,6 +34,9 @@ export class User {
   
   @Column({ default: 1, nullable: false})
     level: number;
+
+  @Column({ default: false, nullable: false})
+    streamer: boolean;
 
   @OneToMany((type) => UserToBadge, (badge) => badge.badge, {
     eager: true

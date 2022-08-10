@@ -9,7 +9,7 @@ import { UpdateBadgeDto } from '@badge/update-badge.dto';
 @Controller('badge')
 export class BadgeController {
   constructor(private readonly badgeservice: BadgeService) {}
-
+ 
   @UseGuards(JwtAuthGuard)
   @Post()
   createBadge(@Req() req, @Body() badgeDTO: CreateBadgeDto) {

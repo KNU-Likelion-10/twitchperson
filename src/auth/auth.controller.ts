@@ -4,6 +4,9 @@ import {
 import { RefreshService } from '@refresh/auth.service';
 import { AuthService } from '@auth/auth.service';
 import { TwitchAuthGuard } from '@auth/guard/twitch-auth.guard';
+import { JwtRefreshGuard } from '@src/auth-refresh/guard/jwt-refresh-auth.guard';
+import { User } from '@src/user/user.entity';
+import { UserService } from '@src/user/user.service';
 
 export type twitchInfo = {
     accessToken: string,
@@ -29,6 +32,7 @@ export class AuthController {
   constructor(
         private readonly authService: AuthService,
         private readonly refreshService: RefreshService,
+        private readonly userService: UserService,
   ) {}
 
   @Get('/twitch')
@@ -39,28 +43,25 @@ export class AuthController {
   @UseGuards(TwitchAuthGuard)
   async twitchAuthRedirect(@Req() req, @Res() res) {
     const info: twitchInfo = req.user;
+    
+    const user: User = await this.userService.signUp(info);
 
-    this.authService.signUp(info);
-    // if((await this.authService.existSnsUser(req.user.id)) == false){
-    //     this.authService.createUserSNS(req.user.id);
-    //     //res.redirect(`https://codeduri.saintdev.kr/oauth/callback?id=${req.user.id}`)
-    //     res.redirect(`http://localhost:53214/oauth/callback?id=${req.user.id}`)
-    // }
+    const accessToken = await this.authService.generateAccessToken({ id: user.userId });
+    const refreshToken = await this.refreshService.generateRefreshToken({ id: user.userId });
 
-    // const user = await this.authService.findUser(req.user.id);
-
-    // TODO token 생성 시 User 정보를 넣어줘야 합니다.
-    const accessToken = await this.authService.generateAccessToken({ id: '1' });
-    const refreshToken = await this.refreshService.generateRefreshToken({ id: '1' });
-
-    // return res.redirect(`http://codeduri.saintdev.kr/oauth/callback?accessToken=${accessToken}&refreshToken=${refreshToken}`);
-    // return res.redirect(`http://localhost:53214/oauth/callback?accessToken=${accessToken}&refreshToken=${refreshToken}`);
-    // res.setHeader("accessToken", accessToken);
-    return res.redirect(`/oauth?/hi?accessToken=${accessToken}`);
+    return res.redirect(`/oauth?accessToken=${accessToken}?refreshToken=${refreshToken}`);
   }
 
-  @Get('/hi')
+  @Get('')
   hello() {
     return 'hi';
+  }
+  
+  @UseGuards(JwtRefreshGuard)
+  @Get('refresh')
+  async refreshToken(@Req() req, @Res() res) {
+        
+    const accessToken = await this.authService.generateAccessToken({ id: req.user });
+    return res.redirect(`/oauth?accessToken=${accessToken}`);
   }
 }

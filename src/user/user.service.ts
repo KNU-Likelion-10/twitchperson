@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { Badge } from '@badge/badge.entity';
 import { UserToBadge } from '@user/user-badge';
 import { User } from '@user/user.entity';
+import { twitchInfo } from '@auth/auth.controller';
 
 @Injectable()
 export class UserService {
@@ -58,6 +59,18 @@ export class UserService {
     async getInfo(userInfo: any) {
         return await this.userRepository.findOne({ 
             where: { id: userInfo.id },
+        });
+    }
+
+    async signUp(info: twitchInfo) {
+        return await this.userRepository.save({
+          userId: info.profile.id,
+          email: info.profile.email,
+          userName: info.profile.display_name,
+          type: info.profile.type,
+          broadcasterType: info.profile.broadcaster_type,
+          description: info.profile.description,
+          profileImage: info.profile.profile_image_url,
         });
     }
 }
