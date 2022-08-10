@@ -11,7 +11,6 @@ import { RefreshModule } from '@refresh/auth.module';
 import { AuthModule } from '@auth/auth.module';
 import { BadgeModule } from '@badge/badge.module';
 import { ImageModule } from '@image/image.module';
-import { StreamerModule } from '@streamer/streamer.module';
 import { TwitchApiModule } from '@twitch/twitch-api.module';
 import { Badge } from '@badge/badge.entity';
 import { Image } from '@image/image.entity';
@@ -49,7 +48,6 @@ config();
     RefreshModule,
     BadgeModule,
     ImageModule,
-    StreamerModule,
     TwitchApiModule,
     UserModule,
   ],

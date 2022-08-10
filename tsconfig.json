@@ -23,7 +23,6 @@
       "@refresh/*": ["./src/auth-refresh/*"],
       "@badge/*": ["./src/badge/*"],
       "@image/*": ["./src/image/*"],
-      "@streamer/*": ["./src/streamer/*"],
       "@twitch/*": ["./src/twitch-api/*"],
       "@user/*": ["./src/user/*"]
     }
