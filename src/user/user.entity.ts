@@ -2,6 +2,7 @@ import {
   PrimaryGeneratedColumn, Column, Entity, OneToMany, JoinColumn,
 } from 'typeorm';
 import { UserToBadge } from './user-badge';
+import { UserToStreamer } from './user-stremer';
 
 @Entity()
 export class User {
@@ -11,7 +12,7 @@ export class User {
   @Column()
     userId: string;
 
-  @Column()
+  @Column({ default: ''})
     email: string;
 
   @Column()
@@ -36,11 +37,21 @@ export class User {
     level: number;
 
   @Column({ default: false, nullable: false})
-    streamer: boolean;
+    isStreamer: boolean;
 
   @OneToMany((type) => UserToBadge, (badge) => badge.badge, {
-    eager: true
+    eager: true, cascade: true
   })
   @JoinColumn()
     badges: UserToBadge[];
+
+  @OneToMany((type) => UserToStreamer, (streamer) => streamer.streamer, {
+    eager: true, cascade: true
+  })
+    streamer: UserToStreamer[];
+
+  @OneToMany((type) => UserToStreamer, (follow) => follow.follow, {
+    eager: true, cascade: true
+  })
+    follows: UserToStreamer[];
 }

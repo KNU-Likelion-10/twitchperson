@@ -2,20 +2,37 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Badge } from '@badge/badge.entity';
-import { UserToBadge } from '@user/user-badge';
 import { User } from '@user/user.entity';
+import { UserToBadge } from '@user/user-badge';
+import { UserToStreamer } from '@user/user-stremer';
 import { twitchInfo } from '@auth/auth.controller';
+import axios from 'axios';
+
+type followInfo = {
+    total: number,
+        data: {
+            from_id: string,
+            from_login: string,
+            from_name: string,
+            to_id: string,
+            to_login: string,
+            to_name: string,
+            followed_at: Date
+        }[]
+};
 
 @Injectable()
 export class UserService {
-    
+       
     constructor(
         @InjectRepository(User)
         private readonly userRepository: Repository<User>,
         @InjectRepository(Badge)
         private readonly badgeRepository: Repository<Badge>,
         @InjectRepository(UserToBadge)
-        private readonly userToBadgeRepository: Repository<UserToBadge>
+        private readonly userToBadgeRepository: Repository<UserToBadge>,
+        @InjectRepository(UserToStreamer)
+        private readonly userToStreamerRepository: Repository<UserToStreamer>
     ){}
 
     async getBadge(id: number, userInfo) {
@@ -72,5 +89,66 @@ export class UserService {
           description: info.profile.description,
           profileImage: info.profile.profile_image_url,
         });
+    }
+
+    async getStreamer(user: User, info: twitchInfo) {
+        // axios로 follow 정보 조회
+        const followInfo = await axios.get(`https://api.twitch.tv/helix/users/follows?from_id=${info.profile.id}`, {
+            headers: {
+                Authorization: 'Bearer ' + info.accessToken,
+                'Client-Id': 'rfwqkkm4uyvmmh0koult0arbpmfbcu'
+            }
+        });
+
+        const infos: followInfo = followInfo.data;
+
+        console.log(infos.total, infos.data[0]);
+
+        const follows: UserToStreamer[] = [];
+
+        for(let i=0; i<infos.total; i++) {
+            const temp = await axios.get(`https://api.twitch.tv/helix/users?id=${infos.data[i]['to_id']}`, {
+                headers: {
+                    'Authorization': `Bearer ${info.accessToken}`,
+                    'Client-Id': 'rfwqkkm4uyvmmh0koult0arbpmfbcu'
+                },
+            });
+
+            const streamerInfo: {
+                'id': string,
+                'login': string,
+                'display_name': string,
+                'type': string,
+                'broadcaster_type': string,
+                'description': string,
+                'profile_image_url': string,
+                'offline_image_url': string,
+                'view_count': number,
+                'email': string,
+                'created_at': string,
+                'provider': string
+            } = temp.data.data[0];
+            console.log(streamerInfo);
+
+            const streamer = await this.userRepository.save({
+                userId: streamerInfo.id,
+                email: streamerInfo?.email,
+                userName: streamerInfo.display_name,
+                type: streamerInfo.type,
+                broadcasterType: streamerInfo.broadcaster_type,
+                description: streamerInfo.description,
+                profileImage: streamerInfo.profile_image_url,
+            });
+
+            console.log(streamer)
+
+            const userToStremer = await this.userToStreamerRepository.save({
+                streamer: streamer,
+                follow: user
+            });
+            
+            follows.push(userToStremer);
+        }
+        user.streamer = follows;
     }
 }

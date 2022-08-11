@@ -5,10 +5,11 @@ import { User } from '@user/user.entity';
 import { UserController } from '@user/user.controller';
 import { UserService } from '@user/user.service';
 import { UserToBadge } from '@user/user-badge';
+import { UserToStreamer } from './user-stremer';
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([User, Badge, UserToBadge]),
+        TypeOrmModule.forFeature([User, Badge, UserToBadge, UserToStreamer]),
     ],
     controllers: [UserController],
     providers: [UserService],

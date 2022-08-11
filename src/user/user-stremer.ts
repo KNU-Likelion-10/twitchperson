@@ -1,17 +1,16 @@
-import { Badge } from '@badge/badge.entity';
 import {
   PrimaryGeneratedColumn, Entity, ManyToOne,
 } from 'typeorm';
 import { User } from '@user/user.entity';
 
 @Entity()
-export class UserToBadge {
+export class UserToStreamer {
   @PrimaryGeneratedColumn()
     id: number;
 
   @ManyToOne((type) => User, { onDelete: 'CASCADE' })
-    badge: Badge;
+    streamer: User;
   
   @ManyToOne((type) => User, { onDelete: 'CASCADE' })
-    user: User;
+    follow: User;
 }

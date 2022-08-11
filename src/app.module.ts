@@ -18,6 +18,7 @@ import { User } from '@src/user/user.entity';
 import { config } from 'dotenv';
 import { UserModule } from './user/user.module';
 import { UserToBadge } from './user/user-badge';
+import { UserToStreamer } from './user/user-stremer';
 
 config();
 
@@ -41,7 +42,7 @@ config();
       username: process.env.USER_NAME,
       password: process.env.PASSWORD,
       database: process.env.DATABASE,
-      entities: [Badge, Image, User, UserToBadge],
+      entities: [Badge, Image, User, UserToBadge, UserToStreamer],
       synchronize: true,
     }),
     AuthModule,

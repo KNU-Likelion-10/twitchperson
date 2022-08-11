@@ -27,6 +27,8 @@ export class Badge extends BaseEntity {
   @Column({ default: 0, nullable: false })
     unlike: number;
 
-  @OneToMany((type) => UserToBadge, (badge) => badge.user)
+  @OneToMany((type) => UserToBadge, (badge) => badge.user, {
+    onDelete: 'CASCADE'
+  })
     user: UserToBadge[];
 }
