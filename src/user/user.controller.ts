@@ -5,21 +5,21 @@ import { UserService } from '@user/user.service';
 @Controller('user')
 export class UserController {
     constructor(
-        private readonly userServcie: UserService
+        private readonly userService: UserService
     ) {}
 
     @UseGuards(JwtAuthGuard)
     @Post('take-badge/:id')
     getBadge(@Req() req, @Param('id') id: number) {
       const user = req.user;
-      this.userServcie.getBadge(id, user);
+      this.userService.getBadge(id, user);
     }
 
     @UseGuards(JwtAuthGuard)
     @Get()
     getInfo(@Req() req) {
       const user = req.user;
-      return this.userServcie.getInfo(user);
+      return this.userService.getInfo(user);
     }
 
 }
