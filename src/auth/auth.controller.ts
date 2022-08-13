@@ -52,7 +52,7 @@ export class AuthController {
 
     // await this.userService.getStreamer(user, info);
     
-    return res.redirect(`/oauth?accessToken=${accessToken}?refreshToken=${refreshToken}`);
+    return res.redirect(`/oauth?accessToken=${accessToken}&refreshToken=${refreshToken}`);
   }
 
   @Get('/twitch-local')
@@ -71,7 +71,7 @@ export class AuthController {
 
     // await this.userService.getStreamer(user, info);
     
-    return res.redirect(`http://${process.env.local_redirect_url}?accessToken=${accessToken}?refreshToken=${refreshToken}`);
+    return res.redirect(`http://${process.env.local_redirect_url}?accessToken=${accessToken}&refreshToken=${refreshToken}`);
   }
 
   @Get('')
