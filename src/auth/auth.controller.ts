@@ -47,8 +47,8 @@ export class AuthController {
 
     const user: User = await this.userService.signUp(info);
 
-    const accessToken = await this.authService.generateAccessToken({ id: user.userId });
-    const refreshToken = await this.refreshService.generateRefreshToken({ id: user.userId });
+    const accessToken = await this.authService.generateAccessToken({ id: info.profile.id });
+    const refreshToken = await this.refreshService.generateRefreshToken({ id: info.profile.id });
 
     // await this.userService.getStreamer(user, info);
     

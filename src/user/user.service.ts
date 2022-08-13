@@ -74,15 +74,17 @@ export class UserService {
     }
 
     async getInfo(userInfo: any) {
-        return await this.userRepository.findOne({ 
-            where: { id: userInfo.id },
+        const user = await this.userRepository.findOne({ 
+            where: { userId: userInfo.id },
         });
+
+        return user;
     }
 
     async signUp(info: twitchInfo) {
         const user = await this.userRepository.findOne({ where: { userId: info.profile.id} });
 
-        if(user !== undefined) {
+        if(user !== null) {
             return user;
         }
 
