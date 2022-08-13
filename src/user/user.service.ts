@@ -23,7 +23,7 @@ type followInfo = {
 
 @Injectable()
 export class UserService {
-       
+           
     constructor(
         @InjectRepository(User)
         private readonly userRepository: Repository<User>,
@@ -80,6 +80,12 @@ export class UserService {
     }
 
     async signUp(info: twitchInfo) {
+        const user = await this.userRepository.findOne({ where: { userId: info.profile.id} });
+
+        if(user !== undefined) {
+            return user;
+        }
+
         return await this.userRepository.save({
           userId: info.profile.id,
           email: info.profile.email,
@@ -150,5 +156,9 @@ export class UserService {
             follows.push(userToStremer);
         }
         user.streamer = follows;
+    }
+
+    updateToken(accessToken: string, refreshToken: string) {
+        throw new Error('Method not implemented.');
     }
 }

@@ -5,8 +5,9 @@ import { RefreshService } from '@refresh/auth.service';
 import { AuthService } from '@auth/auth.service';
 import { TwitchAuthGuard } from '@auth/guard/twitch-auth.guard';
 import { JwtRefreshGuard } from '@src/auth-refresh/guard/jwt-refresh-auth.guard';
-import { User } from '@src/user/user.entity';
-import { UserService } from '@src/user/user.service';
+import { User } from '@user/user.entity';
+import { UserService } from '@user/user.service';
+import { TwitchLocalAuthGuard } from '@auth/guard/twitch-auth-local.guard';
 
 export type twitchInfo = {
     accessToken: string,
@@ -37,21 +38,40 @@ export class AuthController {
 
   @Get('/twitch')
   @UseGuards(TwitchAuthGuard)
-  async twitchAuth(@Req() req) {}
+  async twitchAuth() {}
 
   @Get('/twitch/callback')
   @UseGuards(TwitchAuthGuard)
   async twitchAuthRedirect(@Req() req, @Res() res) {
     const info: twitchInfo = req.user;
-    
-    const user: User = await this.userService.signUp(info);
 
-    // await this.userService.getStreamer(user, info);
+    const user: User = await this.userService.signUp(info);
 
     const accessToken = await this.authService.generateAccessToken({ id: user.userId });
     const refreshToken = await this.refreshService.generateRefreshToken({ id: user.userId });
 
+    // await this.userService.getStreamer(user, info);
+    
     return res.redirect(`/oauth?accessToken=${accessToken}?refreshToken=${refreshToken}`);
+  }
+
+  @Get('/twitch-local')
+  @UseGuards(TwitchLocalAuthGuard)
+  async twitchAuthLocal() {}
+
+  @Get('/twitch-local/callback')
+  @UseGuards(TwitchLocalAuthGuard)
+  async twitchAuthLocalRedirect(@Req() req, @Res() res) {
+    const info: twitchInfo = req.user;
+
+    const user: User = await this.userService.signUp(info);
+
+    const accessToken = await this.authService.generateAccessToken({ id: user.userId });
+    const refreshToken = await this.refreshService.generateRefreshToken({ id: user.userId });
+
+    // await this.userService.getStreamer(user, info);
+    
+    return res.redirect(`http://${process.env.local_redirect_url}?accessToken=${accessToken}?refreshToken=${refreshToken}`);
   }
 
   @Get('')
