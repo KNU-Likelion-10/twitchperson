@@ -1,9 +1,10 @@
+import { BaseEntity } from '@src/baseEntity';
 import {
   PrimaryGeneratedColumn, Column, Entity,
 } from 'typeorm';
 
 @Entity()
-export class Image {
+export class Image extends BaseEntity{
   @PrimaryGeneratedColumn()
     id: number;
 
@@ -15,10 +16,7 @@ export class Image {
 
   @Column()
     url: string;
-
-  @Column({ type: Date })
-    createdAt: Date;
-
-  @Column({ type: Date })
-    updatedAt: Date;
+  
+  @Column()
+    mimetype: string
 }
