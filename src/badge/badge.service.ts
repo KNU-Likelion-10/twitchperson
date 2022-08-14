@@ -4,13 +4,16 @@ import { DeleteResult, Repository } from 'typeorm';
 import { Badge } from '@badge/badge.entity';
 import { CreateBadgeDto } from '@badge/create-badge.dto';
 import { UpdateBadgeDto } from '@badge/update-badge.dto';
+import { Image } from '@image/image.entity';
 
 @Injectable()
 export class BadgeService {
   
   constructor(
     @InjectRepository(Badge)
-    private readonly badgeRepository: Repository<Badge>
+      private readonly badgeRepository: Repository<Badge>,
+    @InjectRepository(Image)
+      private readonly imageRepository: Repository<Image>
   ) {}
 
   findAll(page: number) {
@@ -26,8 +29,20 @@ export class BadgeService {
     });
   }
 
-  async createBadge(badgeDTO: CreateBadgeDto): Promise<Badge> {
-    return await this.badgeRepository.save(badgeDTO);
+  async createBadge(badgeDTO: CreateBadgeDto, file): Promise<Badge> {
+    const image = await this.imageRepository.save({
+      name: file.originalname,
+      uuid: file.location.substring(44),
+      url: file.location,
+      mimetype: file.mimetype
+    })
+    return await this.badgeRepository.save({
+      name: badgeDTO.name,
+      desc: badgeDTO.desc,
+      condition: badgeDTO.condition,
+      exp: +badgeDTO.exp,
+      image: image
+    });
   }
 
   async updateBadge(id: number, badgeDTO: UpdateBadgeDto): Promise<Badge> {

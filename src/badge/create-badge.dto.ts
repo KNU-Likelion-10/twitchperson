@@ -1,4 +1,4 @@
-import { IsNumber, IsString } from 'class-validator';
+import { IsString } from 'class-validator';
 
 export class CreateBadgeDto {
   @IsString()
@@ -10,6 +10,6 @@ export class CreateBadgeDto {
   @IsString()
     condition: string;
 
-  @IsNumber()
-    exp: number;
+  @IsString()
+    exp: string;
 }

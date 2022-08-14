@@ -1,19 +1,24 @@
 import {
-  Body, Controller, Get, Query, Post, Param, Delete, Patch, UseGuards, Req,
+  Body, Controller, Get, Query, Post, Param, Delete, Patch, UseGuards, Req, UseInterceptors, UploadedFile,
 } from '@nestjs/common';
 import { JwtAuthGuard } from '@auth/guard/jwt-access-auth.guard';
 import { BadgeService } from '@badge/badge.service';
 import { CreateBadgeDto } from '@badge/create-badge.dto';
 import { UpdateBadgeDto } from '@badge/update-badge.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { multerOptions } from '@image/multerOption';
 
 @Controller('badge')
 export class BadgeController {
-  constructor(private readonly badgeservice: BadgeService) {}
+  constructor(
+    private readonly badgeservice: BadgeService
+  ) {}
  
   @UseGuards(JwtAuthGuard)
+  @UseInterceptors(FileInterceptor('image', multerOptions))
   @Post()
-  createBadge(@Req() req, @Body() badgeDTO: CreateBadgeDto) {
-    return this.badgeservice.createBadge(badgeDTO);
+  async createBadge(@Req() req, @UploadedFile() file, @Body() badgeDTO: CreateBadgeDto) {
+    return this.badgeservice.createBadge(badgeDTO, file);
   }
 
   @UseGuards(JwtAuthGuard)

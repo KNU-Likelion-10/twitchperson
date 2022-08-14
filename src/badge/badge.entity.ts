@@ -1,8 +1,9 @@
 import {
-  PrimaryGeneratedColumn, Column, Entity, OneToMany,
+  PrimaryGeneratedColumn, Column, Entity, OneToMany, OneToOne, JoinColumn,
 } from 'typeorm';
 import { BaseEntity } from '@src/baseEntity';
 import { UserToBadge } from '@user/user-badge';
+import { Image } from '@image/image.entity';
 
 @Entity()
 export class Badge extends BaseEntity {
@@ -26,6 +27,10 @@ export class Badge extends BaseEntity {
 
   @Column({ default: 0, nullable: false })
     unlike: number;
+  
+  @OneToOne((type) => Image, (Image) => Image.id)
+  @JoinColumn()
+    image: Image;
 
   @OneToMany((type) => UserToBadge, (badge) => badge.user, {
     onDelete: 'CASCADE'
