@@ -84,7 +84,8 @@ export class AuthController {
   async refreshToken(@Req() req, @Res() res) {
         
     const accessToken = await this.authService.generateAccessToken({ id: req.user });
-    res.header('accessToken', accessToken);
-    return ;
+    
+    res.header('refreshToken', `${accessToken}`);
+    return res.send();
   }
 }
