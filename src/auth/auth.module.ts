@@ -1,15 +1,15 @@
 import { Module } from '@nestjs/common';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
-import { RefreshModule } from '@refresh/auth.module';
-import { RefreshService } from '@refresh/auth.service';
 import { TwitchStrategy } from '@auth/strategy/twitch.strategy';
 import { JwtStrategy } from '@auth/strategy/jwt-access.strategy';
+import { TwitchLocalStrategy } from '@auth/strategy/twitch-local.strategy';
 import { AuthController } from '@auth/auth.controller';
 import { AuthService } from '@auth/auth.service';
+import { RefreshModule } from '@refresh/auth.module';
+import { RefreshService } from '@refresh/auth.service';
 import { UserModule } from '@user/user.module';
 import { config } from 'dotenv';
-import { TwitchLocalStrategy } from './strategy/twitch-local.strategy';
 
 config();
 
@@ -24,6 +24,6 @@ config();
     UserModule,
   ],
   providers: [TwitchStrategy, TwitchLocalStrategy, AuthService, RefreshService, JwtStrategy],
-  controllers: [AuthController]
+  controllers: [AuthController],
 })
 export class AuthModule {}

@@ -14,11 +14,12 @@ import { ImageModule } from '@image/image.module';
 import { TwitchApiModule } from '@twitch/twitch-api.module';
 import { Badge } from '@badge/badge.entity';
 import { Image } from '@image/image.entity';
-import { User } from '@src/user/user.entity';
+import { User } from '@user/user.entity';
+import { UserModule } from '@user/user.module';
+import { UserToBadge } from '@user/user-badge';
+import { UserToStreamer } from '@user/user-stremer';
 import { config } from 'dotenv';
-import { UserModule } from './user/user.module';
-import { UserToBadge } from './user/user-badge';
-import { UserToStreamer } from './user/user-stremer';
+
 
 config();
 

@@ -20,5 +20,4 @@ export class AuthService {
     const payload: UserPaylodeValue = { id: user.id };
     return this.jwtService.sign(payload);
   }
-  
 }
