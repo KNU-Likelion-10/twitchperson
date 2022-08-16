@@ -22,9 +22,10 @@ export class BadgeController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @UseInterceptors(FileInterceptor('image', multerOptions))
   @Patch('/:id')
-  updateBadge(@Param('id') id: number, @Body() badgeDTO: UpdateBadgeDto) {
-    return this.badgeservice.updateBadge(id, badgeDTO);
+  updateBadge(@Param('id') id: number, @UploadedFile() file, @Body() badgeDTO: UpdateBadgeDto) {
+    return this.badgeservice.updateBadge(id, badgeDTO, file);
   }
 
   @UseGuards(JwtAuthGuard)

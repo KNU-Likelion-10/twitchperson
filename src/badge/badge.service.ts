@@ -35,7 +35,8 @@ export class BadgeService {
       uuid: file.location.substring(44),
       url: file.location,
       mimetype: file.mimetype
-    })
+    });
+
     return await this.badgeRepository.save({
       name: badgeDTO.name,
       desc: badgeDTO.desc,
@@ -45,10 +46,28 @@ export class BadgeService {
     });
   }
 
-  async updateBadge(id: number, badgeDTO: UpdateBadgeDto): Promise<Badge> {
+  async updateBadge(id: number, badgeDTO: UpdateBadgeDto, file) {
     const data: Badge = await this.badgeRepository.findOne({
       where: { id },
     });
+
+    if(data === null) {
+      return {
+        status: 400,
+        statusMsg: '해당 뱃지는 없습니다.'
+      };
+    }
+    
+    if(file !== undefined) {
+      const image = await this.imageRepository.save({
+        name: file.originalname,
+        uuid: file.location.substring(44),
+        url: file.location,
+        mimetype: file.mimetype
+      });
+      
+      data.image = image;
+    }
 
     if (badgeDTO.name) {
       data.name = badgeDTO.name;
