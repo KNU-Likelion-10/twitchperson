@@ -1,19 +1,19 @@
 import {
   Body, Controller, Get, Query, Post, Param, Delete, Patch, UseGuards, Req, UseInterceptors, UploadedFile,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { JwtAuthGuard } from '@auth/guard/jwt-access-auth.guard';
 import { BadgeService } from '@badge/badge.service';
 import { CreateBadgeDto } from '@badge/create-badge.dto';
 import { UpdateBadgeDto } from '@badge/update-badge.dto';
-import { FileInterceptor } from '@nestjs/platform-express';
 import { multerOptions } from '@image/multerOption';
 
 @Controller('badge')
 export class BadgeController {
   constructor(
-    private readonly badgeservice: BadgeService
+    private readonly badgeservice: BadgeService,
   ) {}
- 
+
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(FileInterceptor('image', multerOptions))
   @Post()
@@ -30,8 +30,8 @@ export class BadgeController {
 
   @UseGuards(JwtAuthGuard)
   @Get('findAll')
-  findAll(@Query('page') page: number) {
-    return this.badgeservice.findAll(page);
+  findAll(@Query('page') page: number, @Query('size') size: number) {
+    return this.badgeservice.findAll(page, size);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -58,5 +58,5 @@ export class BadgeController {
       statusMsg: 'deleted failed',
     };
   }
-
+  
 }

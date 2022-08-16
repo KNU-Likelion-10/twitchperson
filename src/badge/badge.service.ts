@@ -8,18 +8,17 @@ import { Image } from '@image/image.entity';
 
 @Injectable()
 export class BadgeService {
-  
   constructor(
     @InjectRepository(Badge)
       private readonly badgeRepository: Repository<Badge>,
     @InjectRepository(Image)
-      private readonly imageRepository: Repository<Image>
+      private readonly imageRepository: Repository<Image>,
   ) {}
 
-  findAll(page: number) {
+  findAll(page: number, size: number) {
     return this.badgeRepository.findAndCount({
-      take: 5,
-      skip: 5 * (page - 1),
+      take: size,
+      skip: size * (page - 1),
     });
   }
 
@@ -34,7 +33,7 @@ export class BadgeService {
       name: file.originalname,
       uuid: file.location.substring(44),
       url: file.location,
-      mimetype: file.mimetype
+      mimetype: file.mimetype,
     });
 
     return await this.badgeRepository.save({
@@ -42,7 +41,7 @@ export class BadgeService {
       desc: badgeDTO.desc,
       condition: badgeDTO.condition,
       exp: +badgeDTO.exp,
-      image: image
+      image,
     });
   }
 
@@ -51,21 +50,21 @@ export class BadgeService {
       where: { id },
     });
 
-    if(data === null) {
+    if (data === null) {
       return {
         status: 400,
-        statusMsg: '해당 뱃지는 없습니다.'
+        statusMsg: '해당 뱃지는 없습니다.',
       };
     }
-    
-    if(file !== undefined) {
+
+    if (file !== undefined) {
       const image = await this.imageRepository.save({
         name: file.originalname,
         uuid: file.location.substring(44),
         url: file.location,
-        mimetype: file.mimetype
+        mimetype: file.mimetype,
       });
-      
+
       data.image = image;
     }
 
@@ -91,5 +90,4 @@ export class BadgeService {
   async remove(id: number): Promise<DeleteResult> {
     return await this.badgeRepository.delete({ id });
   }
-
 }

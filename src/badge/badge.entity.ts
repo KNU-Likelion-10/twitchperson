@@ -27,13 +27,13 @@ export class Badge extends BaseEntity {
 
   @Column({ default: 0, nullable: false })
     unlike: number;
-  
+
   @OneToOne((type) => Image, (Image) => Image.id)
   @JoinColumn()
     image: Image;
 
   @OneToMany((type) => UserToBadge, (badge) => badge.user, {
-    onDelete: 'CASCADE'
+    onDelete: 'CASCADE',
   })
     user: UserToBadge[];
 }
