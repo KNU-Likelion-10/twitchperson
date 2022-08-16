@@ -50,8 +50,7 @@ export class AuthController {
     const accessToken = await this.authService.generateAccessToken({ id: info.profile.id });
     const refreshToken = await this.refreshService.generateRefreshToken({ id: info.profile.id });
 
-    // await this.userService.getStreamer(user, info);
-    
+    this.userService.addStreamer(user, info);
     return res.redirect(`/oauth?accessToken=${accessToken}&refreshToken=${refreshToken}`);
   }
 

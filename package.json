@@ -22,6 +22,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@nestjs/bull": "^0.6.0",
     "@nestjs/common": "^9.0.3",
     "@nestjs/core": "^9.0.0",
     "@nestjs/jwt": "^9.0.0",
@@ -31,10 +32,12 @@
     "@twurple/api": "^5.1.6",
     "@twurple/auth": "^5.1.6",
     "@twurple/eventsub": "^5.1.6",
+    "@types/bull": "^3.15.9",
     "@types/passport-jwt": "^3.0.6",
     "@types/passport-twitch-latest": "^1.0.1",
     "aws-sdk": "^2.1179.0",
     "axios": "^0.27.2",
+    "bull": "^4.8.5",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.13.2",
     "dotenv": "^16.0.1",

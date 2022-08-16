@@ -7,6 +7,8 @@ import { UserToBadge } from '@user/user-badge';
 import { UserToStreamer } from '@user/user-stremer';
 import { twitchInfo } from '@auth/auth.controller';
 import axios from 'axios';
+import { InjectQueue } from '@nestjs/bull';
+import { Queue } from 'bull';
 
 type followInfo = {
     total: number,
@@ -32,7 +34,9 @@ export class UserService {
         @InjectRepository(UserToBadge)
         private readonly userToBadgeRepository: Repository<UserToBadge>,
         @InjectRepository(UserToStreamer)
-        private readonly userToStreamerRepository: Repository<UserToStreamer>
+        private readonly userToStreamerRepository: Repository<UserToStreamer>,
+        @InjectQueue('streamer')
+        private readonly streamerQueue: Queue
     ){}
 
     async getBadge(id: number, userInfo) {
@@ -101,10 +105,10 @@ export class UserService {
 
     async getStreamer(user: User, info: twitchInfo) {
         // axios로 follow 정보 조회
-        const followInfo = await axios.get(`https://api.twitch.tv/helix/users/follows?from_id=${info.profile.id}`, {
+        const followInfo = await axios.get(`https://api.twitch.tv/helix/users/follows?from_id=${info.profile.id}&first=100`, {
             headers: {
                 Authorization: 'Bearer ' + info.accessToken,
-                'Client-Id': 'rfwqkkm4uyvmmh0koult0arbpmfbcu'
+                'Client-Id': process.env.twitch_secret
             }
         });
 
@@ -115,10 +119,13 @@ export class UserService {
         const follows: UserToStreamer[] = [];
 
         for(let i=0; i<infos.total; i++) {
+            
+            if(infos.data[i] === undefined) continue;
+
             const temp = await axios.get(`https://api.twitch.tv/helix/users?id=${infos.data[i]['to_id']}`, {
                 headers: {
                     'Authorization': `Bearer ${info.accessToken}`,
-                    'Client-Id': 'rfwqkkm4uyvmmh0koult0arbpmfbcu'
+                    'Client-Id': process.env.twitch_secret
                 },
             });
 
@@ -136,19 +143,22 @@ export class UserService {
                 'created_at': string,
                 'provider': string
             } = temp.data.data[0];
-            console.log(streamerInfo);
 
-            const streamer = await this.userRepository.save({
+            let streamer = await this.userRepository.findOne({
+                where: { userId: streamerInfo.id }
+            });
+
+            if(streamer) continue;
+
+            streamer = await this.userRepository.save({
                 userId: streamerInfo.id,
                 email: streamerInfo?.email,
                 userName: streamerInfo.display_name,
                 type: streamerInfo.type,
                 broadcasterType: streamerInfo.broadcaster_type,
-                description: streamerInfo.description,
+                description: '',
                 profileImage: streamerInfo.profile_image_url,
             });
-
-            console.log(streamer)
 
             const userToStremer = await this.userToStreamerRepository.save({
                 streamer: streamer,
@@ -162,5 +172,12 @@ export class UserService {
 
     updateToken(accessToken: string, refreshToken: string) {
         throw new Error('Method not implemented.');
+    }
+
+    async addStreamer(user: User, info: twitchInfo) {
+        await this.streamerQueue.add('create', {
+            user: user,
+            info: info
+        });
     }
 }
