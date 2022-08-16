@@ -12,7 +12,7 @@ export class User {
   @Column()
     userId: string;
 
-  @Column({ default: ''})
+  @Column({ default: '' })
     email: string;
 
   @Column()
@@ -29,29 +29,28 @@ export class User {
 
   @Column()
     profileImage: string;
-  
-  @Column({ default: 0, nullable: false})
+
+  @Column({ default: 0, nullable: false })
     exp: number;
-  
-  @Column({ default: 1, nullable: false})
+
+  @Column({ default: 1, nullable: false })
     level: number;
 
-  @Column({ default: false, nullable: false})
+  @Column({ default: false, nullable: false })
     isStreamer: boolean;
 
-  @OneToMany((type) => UserToBadge, (badge) => badge.badge, {
-    eager: true, cascade: true
+  @OneToMany((type) => UserToBadge, (badge) => badge.user, {
+    eager: true, cascade: true,
   })
-  @JoinColumn()
     badges: UserToBadge[];
 
-  @OneToMany((type) => UserToStreamer, (streamer) => streamer.streamer, {
-    eager: true, cascade: true
-  })
-    streamer: UserToStreamer[];
+  // @OneToMany((type) => UserToStreamer, (streamer) => streamer.streamer, {
+  //   eager: true, cascade: true,
+  // })
+  //   streamer: UserToStreamer[];
 
   @OneToMany((type) => UserToStreamer, (follow) => follow.follow, {
-    eager: true, cascade: true
+    eager: true, cascade: true,
   })
     follows: UserToStreamer[];
 }

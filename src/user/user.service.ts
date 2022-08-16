@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { InjectQueue } from '@nestjs/bull';
 import { Repository } from 'typeorm';
+import axios from 'axios';
+import { Queue } from 'bull';
+import { twitchInfo } from '@auth/auth.controller';
 import { Badge } from '@badge/badge.entity';
 import { User } from '@user/user.entity';
 import { UserToBadge } from '@user/user-badge';
 import { UserToStreamer } from '@user/user-stremer';
-import { twitchInfo } from '@auth/auth.controller';
-import axios from 'axios';
-import { InjectQueue } from '@nestjs/bull';
-import { Queue } from 'bull';
 
 type followInfo = {
     total: number,
@@ -42,37 +42,38 @@ export class UserService {
     async getBadge(id: number, userInfo) {
 
         // 일단 id 값으로 뱃지가 있는지 조회를 해야함. Promise< >
-        const badge = await this.badgeRepository.findOne({ where: { id } });
+        const badge: Badge = await this.badgeRepository.findOne({ where: { id } });
         // user를 조회해야합니다.
-        const user = await this.userRepository.findOne({ 
-            where: { id: userInfo.id },
+        const user: User = await this.userRepository.findOne({ 
+            where: { userId: userInfo.id },
         });
         
         // 뱃지가 있으니, 이걸 User가지고 있어야합니다.
         if(badge && user) {
           
-            const userToBadge = await this.userToBadgeRepository.save({ user: user, badge: badge});
+            await this.userToBadgeRepository.save({ user: user, badge: badge });
 
-            if(user.badges == undefined) {
-                user.badges = [userToBadge];
-            } else {
-                user.badges.push(userToBadge);
-            }
             // 경험치를 넣어줘야합니다.
-            user.exp += badge.exp;
-            if(user.exp >= 50) {
-                user.level += 1;
-                user.exp -= 50;
-            }
-
-            if(user.badges == undefined){
-                user.badges = [ userToBadge ];
-            } else {
-                user.badges.push(userToBadge);
+            let exp = user.exp + badge.exp;
+            let level = user.level;
+            if(exp >= 50) {
+                level += 1;
+                exp -= 50;
             }
             
-            this.userRepository.save(user);
+            await this.userRepository.createQueryBuilder()
+                .update(User)
+                .set({
+                    exp: exp,
+                    level: level
+                })
+                .where({ userId: userInfo.id})
+                .execute();
 
+            return await this.userRepository.findOne({ 
+                where: { userId: userInfo.id },
+                relations: ["follows", "follows.streamer", "badges", "badges.badge"]
+            });
         }
         
     }
@@ -80,8 +81,9 @@ export class UserService {
     async getInfo(userInfo: any) {
         const user = await this.userRepository.findOne({ 
             where: { userId: userInfo.id },
+            relations: ["follows", "follows.streamer", "badges", "badges.badge"]
         });
-
+        
         return user;
     }
 
@@ -103,7 +105,7 @@ export class UserService {
         });
     }
 
-    async getStreamer(user: User, info: twitchInfo) {
+    async registerStreamer(user: User, info: twitchInfo) {
         // axios로 follow 정보 조회
         const followInfo = await axios.get(`https://api.twitch.tv/helix/users/follows?from_id=${info.profile.id}&first=100`, {
             headers: {
@@ -113,10 +115,6 @@ export class UserService {
         });
 
         const infos: followInfo = followInfo.data;
-
-        console.log(infos.total, infos.data[0]);
-
-        const follows: UserToStreamer[] = [];
 
         for(let i=0; i<infos.total; i++) {
             
@@ -158,16 +156,14 @@ export class UserService {
                 broadcasterType: streamerInfo.broadcaster_type,
                 description: '',
                 profileImage: streamerInfo.profile_image_url,
+                isStreamer: true
             });
 
-            const userToStremer = await this.userToStreamerRepository.save({
+            const temp2 = await this.userToStreamerRepository.save({
                 streamer: streamer,
                 follow: user
             });
-            
-            follows.push(userToStremer);
         }
-        user.streamer = follows;
     }
 
     updateToken(accessToken: string, refreshToken: string) {
@@ -178,6 +174,14 @@ export class UserService {
         await this.streamerQueue.add('create', {
             user: user,
             info: info
+        });
+    }
+
+    findAllStreamer(page: number, size: number){
+        return this.userRepository.findAndCount({
+            where: { isStreamer: true },
+            take: size,
+            skip: size * (page - 1),
         });
     }
 }

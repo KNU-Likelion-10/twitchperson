@@ -10,7 +10,7 @@ export class UserToStreamer {
 
   @ManyToOne((type) => User, { onDelete: 'CASCADE' })
     streamer: User;
-  
+
   @ManyToOne((type) => User, { onDelete: 'CASCADE' })
     follow: User;
 }
