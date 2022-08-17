@@ -50,7 +50,16 @@ export class UserService {
         
         // 뱃지가 있으니, 이걸 User가지고 있어야합니다.
         if(badge && user) {
-          
+            
+            const userToBadge = await this.userToBadgeRepository.findOne({
+                where: { user: { id: user.id }, badge: { id: badge.id} },
+                relations: [ "badge", "user" ]
+            });
+
+            if(userToBadge) {
+                return userToBadge;
+            }                
+
             await this.userToBadgeRepository.save({ user: user, badge: badge });
 
             // 경험치를 넣어줘야합니다.
