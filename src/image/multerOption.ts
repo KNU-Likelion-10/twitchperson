@@ -37,7 +37,7 @@ export const multerOptions = {
     s3,
     bucket: 'twitch-collection2',
     key(req, file, cb) {
-      cb(null, v4(file.originalname));
+      cb(null, v4(file.originalname)+'.'+file.mimetype.substring(6));
     },
   }),
   
