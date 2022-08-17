@@ -4,6 +4,7 @@ import {
 import { BaseEntity } from '@src/baseEntity';
 import { UserToBadge } from '@user/user-badge';
 import { Image } from '@image/image.entity';
+import { Comment } from '@src/comment/comment.entity';
 
 @Entity()
 export class Badge extends BaseEntity {
@@ -36,4 +37,9 @@ export class Badge extends BaseEntity {
     onDelete: 'CASCADE',
   })
     user: UserToBadge[];
+  
+  @OneToMany((type) => Comment, (comment) => comment.comment, {
+    onDelete: 'CASCADE'
+  })
+    comment: Comment[];
 }

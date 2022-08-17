@@ -24,7 +24,8 @@
       "@badge/*": ["./src/badge/*"],
       "@image/*": ["./src/image/*"],
       "@twitch/*": ["./src/twitch-api/*"],
-      "@user/*": ["./src/user/*"]
+      "@user/*": ["./src/user/*"],
+      "@comment/*": ["./src/comment/*"]
     }
   }
 }

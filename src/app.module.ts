@@ -19,6 +19,8 @@ import { UserModule } from '@user/user.module';
 import { UserToBadge } from '@user/user-badge';
 import { UserToStreamer } from '@user/user-stremer';
 import { config } from 'dotenv';
+import { CommentModule } from './comment/comment.module';
+import { Comment } from './comment/comment.entity';
 
 
 config();
@@ -43,7 +45,7 @@ config();
       username: process.env.USER_NAME,
       password: process.env.PASSWORD,
       database: process.env.DATABASE,
-      entities: [Badge, Image, User, UserToBadge, UserToStreamer],
+      entities: [Badge, Image, User, UserToBadge, UserToStreamer, Comment],
       synchronize: true,
     }),
     AuthModule,
@@ -52,6 +54,7 @@ config();
     ImageModule,
     TwitchApiModule,
     UserModule,
+    CommentModule,
   ],
   controllers: [AppController],
   providers: [AppService],

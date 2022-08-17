@@ -24,8 +24,7 @@ type followInfo = {
 };
 
 @Injectable()
-export class UserService {
-           
+export class UserService {           
     constructor(
         @InjectRepository(User)
         private readonly userRepository: Repository<User>,
@@ -193,4 +192,11 @@ export class UserService {
             skip: size * (page - 1),
         });
     }
+    
+    findOne(user) {
+        return this.userRepository.findOne({
+            where: { userId: user}
+        });
+    }
+    
 }

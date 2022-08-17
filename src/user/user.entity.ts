@@ -1,3 +1,4 @@
+import { Comment } from '@src/comment/comment.entity';
 import {
   PrimaryGeneratedColumn, Column, Entity, OneToMany, JoinColumn,
 } from 'typeorm';
@@ -53,4 +54,10 @@ export class User {
     eager: true, cascade: true,
   })
     follows: UserToStreamer[];
+  
+  @OneToMany((type) => Comment, (comment) => comment.author, {
+    eager: true, cascade: true,
+  })
+    comments: Comment[];
+  
 }

@@ -36,8 +36,8 @@ export class BadgeController {
 
   @UseGuards(JwtAuthGuard)
   @Get(':id')
-  find(@Param('id') id: number) {
-    return this.badgeservice.find(id);
+  findOne(@Param('id') id: number) {
+    return this.badgeservice.findOne(id);
   }
 
   @UseGuards(JwtAuthGuard)

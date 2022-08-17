@@ -8,6 +8,7 @@ import { Image } from '@image/image.entity';
 
 @Injectable()
 export class BadgeService {
+  
   constructor(
     @InjectRepository(Badge)
       private readonly badgeRepository: Repository<Badge>,
@@ -22,7 +23,7 @@ export class BadgeService {
     });
   }
 
-  find(id: number) {
+  findOne(id: number) {
     return this.badgeRepository.findOne({
       where: { id },
     });

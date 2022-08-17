@@ -16,5 +16,6 @@ import { Image } from '@image/image.entity';
   ],
   providers: [BadgeService],
   controllers: [BadgeController],
+  exports: [BadgeService]
 })
 export class BadgeModule {}
