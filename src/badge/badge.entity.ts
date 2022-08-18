@@ -42,6 +42,6 @@ export class Badge extends BaseEntity {
   @OneToMany((type) => Comment, (comment) => comment.badge, {
     onDelete: 'CASCADE'
   })
-    comment: Comment[];
+    comments: Comment[];
 
 }

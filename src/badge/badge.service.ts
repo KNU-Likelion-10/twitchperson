@@ -6,8 +6,8 @@ import { CreateBadgeDto } from '@badge/create-badge.dto';
 import { UpdateBadgeDto } from '@badge/update-badge.dto';
 import { Image } from '@image/image.entity';
 import { User } from '@user/user.entity';
-import { UserToBadge } from '@src/user/user-badge';
-import { runInThisContext } from 'vm';
+import { UserToBadge } from '@user/user-badge';
+
 
 @Injectable()
 export class BadgeService { 
@@ -40,7 +40,7 @@ export class BadgeService {
   findOne(id: number) {
     return this.badgeRepository.findOne({
       where: { id },
-      relations: ['image']
+      relations: ['image', 'comments']
     });
   }
 

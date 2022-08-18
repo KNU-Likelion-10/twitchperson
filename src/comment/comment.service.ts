@@ -9,6 +9,7 @@ import { Comment } from '@comment/comment.entity';
 
 @Injectable()
 export class CommentService {
+    
     constructor(
         @InjectRepository(Comment)
         private readonly commentRepository: Repository<Comment>
@@ -86,8 +87,35 @@ export class CommentService {
         return comment;
     }
 
+    // async findAll(badgeId: number) {
+    //     const comment: Comment[] = await this.commentRepository.find({
+    //         where: { badge: { id: badgeId } },
+    //         relations: ['author', 'badge', 'comments', 'parentComment']
+    //     });
+
+    //     if(comment.length === 0) {
+    //         return {
+    //             status: 400,
+    //             statusMsg: 'Comment Not Found',
+    //         }
+    //     }
+
+    //     return comment;
+    // }
+
     async delteOne(commentId: number, user: User) {
         try {
+            const comment = await this.commentRepository.findOne({ 
+                where: { id: commentId, author: { id: user.id } }
+            });
+
+            if(comment === null) {
+                return {
+                    status: 400,
+                    statusMsg: 'Comment Not Found',
+                }
+            }
+
             await this.commentRepository.createQueryBuilder()
                 .delete()
                 .where( { id: commentId, author: { id: user.id } })

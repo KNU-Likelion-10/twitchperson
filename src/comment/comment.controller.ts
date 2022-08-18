@@ -72,6 +72,12 @@ export class CommentController {
         return this.commentService.findOne(commentId);
     }
 
+    // @UseGuards(JwtAuthGuard)
+    // @Get('findAll')
+    // async findAll(@Req() req, @Query('badge') badge: number){
+    //     return this.commentService.findAll(badge);
+    // }
+
     @UseGuards(JwtAuthGuard)
     @Delete(':id')
     async delteOne(@Req() req, @Param('id') commentId: number){
