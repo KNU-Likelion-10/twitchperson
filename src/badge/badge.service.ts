@@ -71,7 +71,7 @@ export class BadgeService {
 
     return await this.badgeRepository.findOne({
       where: { id: badge.id},
-      relations: ['user', 'comment']
+      relations: ['user', 'comments']
     })
   }
 
