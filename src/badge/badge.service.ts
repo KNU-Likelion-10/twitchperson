@@ -19,13 +19,15 @@ export class BadgeService {
   findAll(page: number, size: number) {
     return this.badgeRepository.findAndCount({
       take: size,
-      skip: size * (page - 1),
+      skip: size * page,
+      relations: ['image']
     });
   }
 
   findOne(id: number) {
     return this.badgeRepository.findOne({
       where: { id },
+      relations: ['image']
     });
   }
 
