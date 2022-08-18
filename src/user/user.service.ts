@@ -38,7 +38,7 @@ export class UserService {
         private readonly streamerQueue: Queue
     ){}
 
-    async getBadge(id: number, userInfo) {
+    async takeBadge(id: number, userInfo) {
 
         // 일단 id 값으로 뱃지가 있는지 조회를 해야함. Promise< >
         const badge: Badge = await this.badgeRepository.findOne({ where: { id } });
@@ -55,11 +55,11 @@ export class UserService {
                 relations: [ "badge", "user" ]
             });
 
-            if(userToBadge) {
+            if(userToBadge && userToBadge.isGain === true) {
                 return userToBadge;
             }                
 
-            await this.userToBadgeRepository.save({ user: user, badge: badge });
+            await this.userToBadgeRepository.save({ user: user, badge: badge, isGain: true });
 
             // 경험치를 넣어줘야합니다.
             let exp = user.exp + badge.exp;
@@ -83,6 +83,57 @@ export class UserService {
                 relations: ["follows", "follows.streamer", "badges", "badges.badge"]
             });
         }
+
+        return {
+            status: '404',
+            message: 'User or Badge Not found'
+        };
+        
+    }
+
+    async likeBadge(id: number, userInfo, like: boolean) {
+
+        // 일단 id 값으로 뱃지가 있는지 조회를 해야함. Promise< >
+        const badge: Badge = await this.badgeRepository.findOne({ where: { id } });
+        // user를 조회해야합니다.
+        const user: User = await this.userRepository.findOne({ 
+            where: { userId: userInfo.id },
+        });
+        
+        // 뱃지가 있으니, 이걸 User가지고 있어야합니다.
+        if(badge && user) {
+            
+            const userToBadge = await this.userToBadgeRepository.findOne({
+                where: { user: { id: user.id }, badge: { id: badge.id} },
+                relations: [ "badge", "user" ]
+            });
+
+            if(userToBadge) {
+                
+                await this.userToBadgeRepository.createQueryBuilder()
+                .update(UserToBadge)
+                .set({
+                    like: like
+                })
+                .where({ id: userToBadge.id })
+                .execute();
+
+                return await this.userToBadgeRepository.findOne({
+                    where: { user: { id: user.id }, badge: { id: badge.id} },
+                    relations: [ "badge", "user" ]
+                });
+            } else {
+                return await this.userToBadgeRepository.save({
+                    user: user, badge: badge, like: like,
+                });
+            }
+
+        }
+
+        return {
+            status: '404',
+            message: 'User or Badge Not found'
+        };
         
     }
 

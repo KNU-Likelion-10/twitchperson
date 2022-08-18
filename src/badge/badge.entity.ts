@@ -24,7 +24,7 @@ export class Badge extends BaseEntity {
   @Column({ default: 0, nullable: false })
     exp: number;
 
-  @Column({ default: 0 })
+  @Column({ default: 0, nullable: false })
     like: number;
 
   @Column({ default: 0, nullable: false })
@@ -34,20 +34,14 @@ export class Badge extends BaseEntity {
   @JoinColumn()
     image: Image;
 
-  @OneToMany((type) => UserToBadge, (badge) => badge.user, {
+  @OneToMany((type) => UserToBadge, (badge) => badge.badge, {
     onDelete: 'CASCADE',
   })
     user: UserToBadge[];
   
-  @OneToMany((type) => Comment, (comment) => comment.comment, {
+  @OneToMany((type) => Comment, (comment) => comment.badge, {
     onDelete: 'CASCADE'
   })
     comment: Comment[];
-
-  @OneToOne((type) => User, (user) => user.id, {
-    cascade: true,
-  })
-  @JoinColumn()
-    author: User;
 
 }

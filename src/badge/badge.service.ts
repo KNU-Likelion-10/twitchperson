@@ -6,6 +6,8 @@ import { CreateBadgeDto } from '@badge/create-badge.dto';
 import { UpdateBadgeDto } from '@badge/update-badge.dto';
 import { Image } from '@image/image.entity';
 import { User } from '@user/user.entity';
+import { UserToBadge } from '@src/user/user-badge';
+import { runInThisContext } from 'vm';
 
 @Injectable()
 export class BadgeService { 
@@ -14,6 +16,8 @@ export class BadgeService {
       private readonly badgeRepository: Repository<Badge>,
     @InjectRepository(Image)
       private readonly imageRepository: Repository<Image>,
+    @InjectRepository(UserToBadge)
+      private readonly userToBadgeRepository: Repository<UserToBadge>,
   ) {}
 
   findAll(page: number, size: number) {
@@ -24,12 +28,12 @@ export class BadgeService {
     });
   }
 
-  findAllCreated(page: number, size: number, author: User) {
-    return this.badgeRepository.findAndCount({
+  async findAllCreated(page: number, size: number, author: User) {
+    return await this.badgeRepository.findAndCount({
       take: size,
       skip: size * page,
-      relations: ['image'],
-      where: { author: { id: author.id }}
+      relations: ['image', 'user'],
+      where: { user: { user: { id: author.id }, isAuthor: true } }
     });
   }
 
@@ -40,7 +44,7 @@ export class BadgeService {
     });
   }
 
-  async createBadge(badgeDTO: CreateBadgeDto, file, author: User): Promise<Badge> {
+  async createBadge(badgeDTO: CreateBadgeDto, file, user: User) {
     const image = await this.imageRepository.save({
       name: file.originalname,
       uuid: file.location.substring(44),
@@ -48,14 +52,27 @@ export class BadgeService {
       mimetype: file.mimetype,
     });
 
-    return await this.badgeRepository.save({
+    const badge = await this.badgeRepository.save({
       name: badgeDTO.name,
       desc: badgeDTO.desc,
       condition: badgeDTO.condition,
       exp: +badgeDTO.exp,
-      author: author,
       image,
     });
+
+    const isExit = await this.userToBadgeRepository.findOne({
+      where: { user: { id: user.id }, badge: { id: badge.id }}
+    });
+    
+    if(isExit) {
+      return isExit;
+    }
+    await this.userToBadgeRepository.save({ user: user, badge: badge, isAuthor: true });
+
+    return await this.badgeRepository.findOne({
+      where: { id: badge.id},
+      relations: ['user', 'comment']
+    })
   }
 
   async updateBadge(id: number, badgeDTO: UpdateBadgeDto, file) {

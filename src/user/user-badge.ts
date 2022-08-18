@@ -1,5 +1,5 @@
 import {
-  PrimaryGeneratedColumn, Entity, ManyToOne,
+  PrimaryGeneratedColumn, Entity, ManyToOne, Column
 } from 'typeorm';
 import { Badge } from '@badge/badge.entity';
 import { User } from '@user/user.entity';
@@ -8,6 +8,15 @@ import { User } from '@user/user.entity';
 export class UserToBadge {
   @PrimaryGeneratedColumn()
     id: number;
+
+  @Column({ nullable: true})
+    like: boolean;
+  
+  @Column({ default: false, nullable: false})
+    isGain: boolean;
+  
+  @Column({ default: false, nullable: false})
+    isAuthor: boolean;
 
   @ManyToOne((type) => Badge, { onDelete: 'CASCADE' })
     badge: Badge;
