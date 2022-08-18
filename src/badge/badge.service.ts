@@ -5,10 +5,10 @@ import { Badge } from '@badge/badge.entity';
 import { CreateBadgeDto } from '@badge/create-badge.dto';
 import { UpdateBadgeDto } from '@badge/update-badge.dto';
 import { Image } from '@image/image.entity';
+import { User } from '@user/user.entity';
 
 @Injectable()
-export class BadgeService {
-  
+export class BadgeService { 
   constructor(
     @InjectRepository(Badge)
       private readonly badgeRepository: Repository<Badge>,
@@ -24,6 +24,15 @@ export class BadgeService {
     });
   }
 
+  findAllCreated(page: number, size: number, author: User) {
+    return this.badgeRepository.findAndCount({
+      take: size,
+      skip: size * page,
+      relations: ['image'],
+      where: { author: { id: author.id }}
+    });
+  }
+
   findOne(id: number) {
     return this.badgeRepository.findOne({
       where: { id },
@@ -31,7 +40,7 @@ export class BadgeService {
     });
   }
 
-  async createBadge(badgeDTO: CreateBadgeDto, file): Promise<Badge> {
+  async createBadge(badgeDTO: CreateBadgeDto, file, author: User): Promise<Badge> {
     const image = await this.imageRepository.save({
       name: file.originalname,
       uuid: file.location.substring(44),
@@ -44,6 +53,7 @@ export class BadgeService {
       desc: badgeDTO.desc,
       condition: badgeDTO.condition,
       exp: +badgeDTO.exp,
+      author: author,
       image,
     });
   }

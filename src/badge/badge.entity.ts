@@ -4,7 +4,8 @@ import {
 import { BaseEntity } from '@src/baseEntity';
 import { UserToBadge } from '@user/user-badge';
 import { Image } from '@image/image.entity';
-import { Comment } from '@src/comment/comment.entity';
+import { Comment } from '@comment/comment.entity';
+import { User } from '@user/user.entity';
 
 @Entity()
 export class Badge extends BaseEntity {
@@ -42,4 +43,11 @@ export class Badge extends BaseEntity {
     onDelete: 'CASCADE'
   })
     comment: Comment[];
+
+  @OneToOne((type) => User, (user) => user.id, {
+    cascade: true,
+  })
+  @JoinColumn()
+    author: User;
+
 }

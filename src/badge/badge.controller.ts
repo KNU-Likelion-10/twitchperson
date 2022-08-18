@@ -4,6 +4,7 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { JwtAuthGuard } from '@auth/guard/jwt-access-auth.guard';
 import { BadgeService } from '@badge/badge.service';
+import { UserService } from '@user/user.service';
 import { CreateBadgeDto } from '@badge/create-badge.dto';
 import { UpdateBadgeDto } from '@badge/update-badge.dto';
 import { multerOptions } from '@image/multerOption';
@@ -12,13 +13,23 @@ import { multerOptions } from '@image/multerOption';
 export class BadgeController {
   constructor(
     private readonly badgeservice: BadgeService,
+    private readonly userService: UserService
   ) {}
 
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(FileInterceptor('image', multerOptions))
   @Post()
   async createBadge(@Req() req, @UploadedFile() file, @Body() badgeDTO: CreateBadgeDto) {
-    return this.badgeservice.createBadge(badgeDTO, file);
+    
+    const author = await this.userService.findOne(req.user.id);
+    if(author === null) {
+        return {
+            status: 400,
+            statusMsg: 'User Not Found',
+        }
+    }
+
+    return this.badgeservice.createBadge(badgeDTO, file, author);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -32,6 +43,19 @@ export class BadgeController {
   @Get('findAll')
   findAll(@Query('page') page: number, @Query('size') size: number) {
     return this.badgeservice.findAll(page, size);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('findAll-created')
+  async findAllCreated(@Req() req, @Query('page') page: number, @Query('size') size: number) {
+    const author = await this.userService.findOne(req.user.id);
+    if(author === null) {
+        return {
+            status: 400,
+            statusMsg: 'User Not Found',
+        }
+    }
+    return this.badgeservice.findAllCreated(page, size, author);
   }
 
   @UseGuards(JwtAuthGuard)

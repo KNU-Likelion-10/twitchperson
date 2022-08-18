@@ -13,6 +13,12 @@ import { User } from '@user/user.entity';
     @Column()
       comment: string;
     
+    @Column({ default: 0 })
+      like: number;
+
+    @Column({ default: 0, nullable: false })
+      unlike: number;
+      
     @ManyToOne((type) => User, (user) => user.id)
       author: User;
 
