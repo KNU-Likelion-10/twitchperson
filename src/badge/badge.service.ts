@@ -49,10 +49,11 @@ export class BadgeService {
   }
 
   getComments(badgeId: number) {
-    return this.commentRepository.find({
-      where: { badge: { id: badgeId } },
-      order: { createdAt: 'DESC' }
-    });
+    return this.commentRepository.createQueryBuilder('comment')
+      .where({ badge: { id: badgeId }})
+      .orderBy('comment.createdAt', 'ASC')
+      .leftJoinAndSelect('comment.author', 'authors')
+      .getMany();
   }
 
   async createBadge(badgeDTO: CreateBadgeDto, file, user: User) {
