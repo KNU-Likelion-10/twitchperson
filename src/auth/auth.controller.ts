@@ -51,7 +51,8 @@ export class AuthController {
     const refreshToken = await this.refreshService.generateRefreshToken({ id: info.profile.id });
 
     this.userService.addStreamer(user, info);
-    return res.redirect(`/oauth?accessToken=${accessToken}&refreshToken=${refreshToken}`);
+    
+    return res.redirect(`https://teusudogam-frontend.pages.dev?accessToken=${accessToken}&refreshToken=${refreshToken}`);
   }
 
   @Get('/twitch-local')
