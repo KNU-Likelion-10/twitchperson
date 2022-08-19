@@ -9,10 +9,11 @@ import { ImageModule } from '@image/image.module';
 import { Image } from '@image/image.entity';
 import { UserModule } from '@user/user.module';
 import { UserToBadge } from '@src/user/user-badge';
+import { Comment } from '@src/comment/comment.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Badge, User, Image, UserToBadge]),
+    TypeOrmModule.forFeature([Badge, User, Image, UserToBadge, Comment]),
     AuthModule,
     ImageModule,
     UserModule,

@@ -82,4 +82,9 @@ export class BadgeController {
     };
   }
   
+  @Get(':badge/comment')
+  getComments(@Param('badge') badgeId: number) {
+    return this.badgeservice.getComments(badgeId);
+  }
+
 }

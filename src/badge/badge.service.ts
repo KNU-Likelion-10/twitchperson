@@ -7,10 +7,11 @@ import { UpdateBadgeDto } from '@badge/update-badge.dto';
 import { Image } from '@image/image.entity';
 import { User } from '@user/user.entity';
 import { UserToBadge } from '@user/user-badge';
-
+import { Comment } from '@src/comment/comment.entity';
 
 @Injectable()
-export class BadgeService { 
+export class BadgeService {
+  
   constructor(
     @InjectRepository(Badge)
       private readonly badgeRepository: Repository<Badge>,
@@ -18,6 +19,8 @@ export class BadgeService {
       private readonly imageRepository: Repository<Image>,
     @InjectRepository(UserToBadge)
       private readonly userToBadgeRepository: Repository<UserToBadge>,
+    @InjectRepository(Comment)
+      private readonly commentRepository: Repository<Comment>
   ) {}
 
   findAll(page: number, size: number) {
@@ -42,6 +45,13 @@ export class BadgeService {
       where: { id },
       relations: ['image', 'comments', 'comments.author'],
       order: { comments: { createdAt: "ASC" } }
+    });
+  }
+
+  getComments(badgeId: number) {
+    return this.commentRepository.find({
+      where: { badge: { id: badgeId } },
+      order: { createdAt: 'DESC' }
     });
   }
 
