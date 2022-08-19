@@ -51,7 +51,7 @@ export class BadgeService {
   getComments(badgeId: number) {
     return this.commentRepository.createQueryBuilder('comment')
       .where({ badge: { id: badgeId }})
-      .orderBy('comment.createdAt', 'ASC')
+      .orderBy('comment.createdAt', 'DESC')
       .leftJoinAndSelect('comment.author', 'authors')
       .getMany();
   }
