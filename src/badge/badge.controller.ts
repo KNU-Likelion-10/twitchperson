@@ -39,7 +39,6 @@ export class BadgeController {
     return this.badgeservice.updateBadge(id, badgeDTO, file);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Get('findAll')
   findAll(@Query('page') page: number, @Query('size') size: number) {
     return this.badgeservice.findAll(page, size);
