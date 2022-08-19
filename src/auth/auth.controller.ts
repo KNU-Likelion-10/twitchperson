@@ -68,7 +68,7 @@ export class AuthController {
     const accessToken = await this.authService.generateAccessToken({ id: user.userId });
     const refreshToken = await this.refreshService.generateRefreshToken({ id: user.userId });
 
-    // await this.userService.getStreamer(user, info);
+    this.userService.addStreamer(user, info);
 
     return res.redirect(`http://${process.env.local_redirect_url}?accessToken=${accessToken}&refreshToken=${refreshToken}`);
   }
