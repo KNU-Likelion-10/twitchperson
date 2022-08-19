@@ -15,6 +15,13 @@ export class CommentService {
         private readonly commentRepository: Repository<Comment>
     ){}
 
+    async findAll(badgeId: number){
+       return await this.commentRepository.find({
+        where: { badge: { id: badgeId } },
+        order: { createdAt: 'ASC' }
+       });  
+    }
+
     async createComment(badge: Badge, user: User, createDTO: CreateCommentDto) {
         
         return await this.commentRepository.save({

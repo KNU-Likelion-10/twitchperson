@@ -40,7 +40,8 @@ export class BadgeService {
   findOne(id: number) {
     return this.badgeRepository.findOne({
       where: { id },
-      relations: ['image', 'comments']
+      relations: ['image', 'comments', 'comments.author'],
+      order: { comments: { createdAt: "ASC" } }
     });
   }
 

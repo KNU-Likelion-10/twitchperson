@@ -67,9 +67,9 @@ export class CommentController {
     }
 
     @UseGuards(JwtAuthGuard)
-    @Get(':id')
-    async findOne(@Req() req, @Param('id') commentId: number){
-        return this.commentService.findOne(commentId);
+    @Get()
+    async findAll(@Req() req, @Query('badge') badgeId: number){
+        return this.commentService.findAll(badgeId);
     }
 
     // @UseGuards(JwtAuthGuard)
