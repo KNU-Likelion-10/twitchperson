@@ -128,7 +128,7 @@ export class BadgeService {
     return await this.badgeRepository.save(data);
   }
 
-  async remove(id: number): Promise<DeleteResult> {
+  async remove(id: number) {
     return await this.badgeRepository.delete({ id });
   }
 }

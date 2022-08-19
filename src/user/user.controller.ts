@@ -51,7 +51,10 @@ export class UserController {
 
   @UseGuards(JwtAuthGuard)
   @Post('/most')
-  addMost() {
+  addMost(@Req() req, @Query('num') num: 1 | 2 | 3, @Query('streamer') streamerNum: number) {
+    const { user } = req;
 
+    return this.userService.addMost(num, user, streamerNum);
   }
+
 }

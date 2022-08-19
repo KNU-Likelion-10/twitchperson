@@ -68,18 +68,12 @@ export class BadgeController {
   async remove(@Param('id') id: number) {
     const response = await this.badgeservice.remove(id);
 
-    if (response.affected === 1) {
-      return {
+    return {
         data: { id },
         status: 201,
         statusMsg: 'deleted successfully',
-      };
-    }
-    return {
-      data: { id },
-      status: 400,
-      statusMsg: 'deleted failed',
     };
+    
   }
   
   @Get(':badge/comment')

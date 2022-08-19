@@ -35,12 +35,12 @@ export class Badge extends BaseEntity {
     image: Image;
 
   @OneToMany((type) => UserToBadge, (badge) => badge.badge, {
-    onDelete: 'CASCADE',
+    cascade: true,  onDelete: 'CASCADE'
   })
     user: UserToBadge[];
   
   @OneToMany((type) => Comment, (comment) => comment.badge, {
-    onDelete: 'CASCADE'
+    cascade: true,  onDelete: 'CASCADE'
   })
     comments: Comment[];
 

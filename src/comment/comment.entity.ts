@@ -22,7 +22,7 @@ import { User } from '@user/user.entity';
     @ManyToOne((type) => User, (user) => user.id)
       author: User;
 
-    @ManyToOne((type) => Badge, (badge) => badge.id)
+    @ManyToOne((type) => Badge, (badge) => badge.id, { onDelete: 'CASCADE' })
       badge: Badge;
     
     @OneToMany((type) => Comment, (comment) => comment.parentComment, {

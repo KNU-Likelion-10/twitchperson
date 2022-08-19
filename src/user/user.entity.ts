@@ -45,31 +45,21 @@ export class User {
   })
     badges: UserToBadge[];
 
-  // @OneToMany((type) => UserToStreamer, (streamer) => streamer.streamer, {
-  //   eager: true, cascade: true,
-  // })
-  //   streamer: UserToStreamer[];
-
-  @OneToMany((type) => UserToStreamer, (follow) => follow.follow, {
+  // 내 입장에서의 구독한 사람들
+  @OneToMany((type) => UserToStreamer, (userToStreamer) => userToStreamer.follower, {
     eager: true, cascade: true,
   })
     follows: UserToStreamer[];
+  
+  // 스트리머 입장에서 나를 구독한 사람들
+  @OneToMany((type) => UserToStreamer, (userToStreamer) => userToStreamer.streamer, {
+    eager: true, cascade: true,
+  })
+    followers: UserToStreamer[];
   
   @OneToMany((type) => Comment, (comment) => comment.author, {
     eager: true, cascade: true,
   })
     comments: Comment[];
-  
-  // @OneToOne((type) => UserToStreamer, (userToStreamer) => userToStreamer.streamer )
-  // @JoinColumn()
-  //   most1: UserToStreamer;
-  
-  // @OneToOne((type) => UserToStreamer, (userToStreamer) => userToStreamer.streamer )
-  // @JoinColumn()
-  //   most2: UserToStreamer;
-  
-  // @OneToOne((type) => UserToStreamer, (userToStreamer) => userToStreamer.streamer )
-  // @JoinColumn()
-  //   most3: UserToStreamer;
 
 }

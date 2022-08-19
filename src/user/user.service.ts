@@ -9,6 +9,7 @@ import { Badge } from '@badge/badge.entity';
 import { User } from '@user/user.entity';
 import { UserToBadge } from '@user/user-badge';
 import { UserToStreamer } from '@user/user-stremer';
+import { stream } from 'winston';
 
 type followInfo = {
     total: number,
@@ -25,6 +26,7 @@ type followInfo = {
 
 @Injectable()
 export class UserService {
+    
     constructor(
         @InjectRepository(User)
         private readonly userRepository: Repository<User>,
@@ -220,7 +222,7 @@ export class UserService {
 
             const temp2 = await this.userToStreamerRepository.save({
                 streamer: streamer,
-                follow: user
+                follower: user
             });
         }
     }
@@ -256,5 +258,32 @@ export class UserService {
             where: { userId: user.id, badges: { isGain: true } },
             relations: [ 'badges.badge' ]
         });
-    }       
+    }
+
+    async addMost(num: 1 | 2 | 3, user, streamerNum: number) {
+        
+        const streamer = await this.userToStreamerRepository.findOne({
+            where: { streamer: { id: streamerNum }, follower: { userId: user.id }  },
+            relations: [ "follower", "streamer" ]
+        });
+
+        if(streamer === null) {
+            return {
+                status: 404,
+                message: 'Streamer Not Found'
+            };
+        }
+
+        await this.userToStreamerRepository.createQueryBuilder()
+        .update(UserToStreamer)
+        .set({ most: true, number: num })
+        .where({ id: streamer.id })
+        .execute();
+
+        return await this.userToStreamerRepository.findOne({
+            where: { most: true, follower: { userId: user.id }  },
+            relations: [ "follower", "streamer" ]
+        });
+
+    }
 }
