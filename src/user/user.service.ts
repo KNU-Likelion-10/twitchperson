@@ -24,7 +24,7 @@ type followInfo = {
 };
 
 @Injectable()
-export class UserService {           
+export class UserService {
     constructor(
         @InjectRepository(User)
         private readonly userRepository: Repository<User>,
@@ -249,5 +249,12 @@ export class UserService {
             where: { userId: user}
         });
     }
-    
+
+    findAllBadge(user) {
+
+        return this.userRepository.findOne({
+            where: { userId: user.id, badges: { isGain: true } },
+            relations: [ 'badges.badge' ]
+        });
+    }       
 }

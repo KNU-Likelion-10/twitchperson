@@ -1,6 +1,6 @@
 import { Comment } from '@src/comment/comment.entity';
 import {
-  PrimaryGeneratedColumn, Column, Entity, OneToMany, JoinColumn,
+  PrimaryGeneratedColumn, Column, Entity, OneToMany, JoinColumn, OneToOne,
 } from 'typeorm';
 import { UserToBadge } from './user-badge';
 import { UserToStreamer } from './user-stremer';
@@ -60,4 +60,16 @@ export class User {
   })
     comments: Comment[];
   
+  // @OneToOne((type) => UserToStreamer, (userToStreamer) => userToStreamer.streamer )
+  // @JoinColumn()
+  //   most1: UserToStreamer;
+  
+  // @OneToOne((type) => UserToStreamer, (userToStreamer) => userToStreamer.streamer )
+  // @JoinColumn()
+  //   most2: UserToStreamer;
+  
+  // @OneToOne((type) => UserToStreamer, (userToStreamer) => userToStreamer.streamer )
+  // @JoinColumn()
+  //   most3: UserToStreamer;
+
 }

@@ -29,6 +29,14 @@ export class UserController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Get('/findAll-Badge')
+  async findAllBadge(@Req() req) {
+    const { user } = req;
+
+    return await this.userService.findAllBadge(user);
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Get()
   getInfo(@Req() req) {
     const { user } = req;
@@ -39,5 +47,11 @@ export class UserController {
   @Get('findAll')
   getStreamers(@Query('page') page: number, @Query('size') size: number) {
     return this.userService.findAllStreamer(page, size);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('/most')
+  addMost() {
+
   }
 }
