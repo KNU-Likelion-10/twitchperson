@@ -18,7 +18,7 @@ export class CommentService {
     async findAll(badgeId: number){
        return await this.commentRepository.find({
         where: { badge: { id: badgeId } },
-        order: { createdAt: 'ASC' }
+        order: { createdAt: 'DESC' }
        });  
     }
 
