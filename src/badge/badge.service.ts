@@ -24,11 +24,14 @@ export class BadgeService {
   ) {}
 
   findAll(page: number, size: number) {
-    return this.badgeRepository.findAndCount({
-      take: size,
-      skip: size * page,
-      relations: ['image']
-    });
+    return this.badgeRepository
+      .createQueryBuilder('badges')
+      .take(size)
+      .skip(size * page)
+      .leftJoinAndSelect('badges.image', 'image')
+      .loadRelationCountAndMap('badges.commentCount', 'badges.comments', 'comments')
+      .orderBy('badges.createdAt', 'DESC')
+      .getManyAndCount();
   }
 
   async findAllCreated(page: number, size: number, author: User) {
@@ -49,10 +52,11 @@ export class BadgeService {
   }
 
   getComments(badgeId: number) {
-    return this.commentRepository.find({
-      where: { badge: { id: badgeId } },
-      order: { createdAt: 'DESC' }
-    });
+    return this.commentRepository.createQueryBuilder('comment')
+      .where({ badge: { id: badgeId }})
+      .orderBy('comment.createdAt', 'DESC')
+      .leftJoinAndSelect('comment.author', 'authors')
+      .getMany();
   }
 
   async createBadge(badgeDTO: CreateBadgeDto, file, user: User) {

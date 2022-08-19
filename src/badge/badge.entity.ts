@@ -44,4 +44,5 @@ export class Badge extends BaseEntity {
   })
     comments: Comment[];
 
+    commentCount: number;
 }
