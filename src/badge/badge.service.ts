@@ -24,11 +24,14 @@ export class BadgeService {
   ) {}
 
   findAll(page: number, size: number) {
-    return this.badgeRepository.findAndCount({
-      take: size,
-      skip: size * page,
-      relations: ['image']
-    });
+    return this.badgeRepository
+      .createQueryBuilder('badges')
+      .take(size)
+      .skip(size * page)
+      .leftJoinAndSelect('badges.image', 'image')
+      .loadRelationCountAndMap('badges.commentCount', 'badges.comments', 'comments')
+      .orderBy('badges.createdAt', 'DESC')
+      .getManyAndCount();
   }
 
   async findAllCreated(page: number, size: number, author: User) {
